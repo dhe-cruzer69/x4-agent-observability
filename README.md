@@ -46,20 +46,5 @@ Apache-2.0
 
 > Status: architecture documentation; implementation and deployment claims require independent verification.
 
-```mermaid
-flowchart LR
-  Producer[Agent or runtime] --> Envelope[Event envelope]
-  Envelope --> Validate[Validate event schema]
-  Validate --> Redactor[Secret and PII redaction]
-  Redactor --> LeakTest{Redaction checks pass?}
-  LeakTest -->|no| Quarantine[Drop or quarantine event]
-  LeakTest -->|yes| Correlate[Attach trace / run / sequence IDs]
-  Correlate --> Buffer[Bounded exporter buffer]
-  Buffer --> Export[Configured exporter]
-  Export --> Store[(Telemetry backend)]
-  Store --> Query[Trace and event query]
-  Query --> Dashboard[Operational dashboard]
-  Quarantine --> Counter[Redaction failure metric]
-```
 **Evidence note:** Redaction guarantees, exporter retries, buffer limits, and backend integrations need implementation-level verification. Never send raw secrets to telemetry.
 
