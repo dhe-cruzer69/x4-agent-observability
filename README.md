@@ -17,6 +17,23 @@ with trace.agent('demo'):
         pass"
 ```
 
+<!-- X4-APEX-DIAGRAM-START:x4-agent-observability -->
+
+```mermaid
+flowchart LR
+    AGENT[Agent or Tool Span] --> EVENT[Structured Event]
+    EVENT --> REDACT[Secret and Sensitive-Field Redaction]
+    REDACT --> SAFE[Sanitized Event]
+    SAFE --> CONSOLE[Console Exporter]
+    SAFE --> JSONL[JSONL Exporter]
+    SAFE --> OTEL[Optional OpenTelemetry-Compatible Export]
+    SAFE --> RECEIPT[Hashed Action Receipt]
+    RECEIPT --> AUDIT[Evidence Consumer]
+    TEST[Redaction and Serialization Tests] --> REDACT
+```
+
+<!-- X4-APEX-DIAGRAM-END:x4-agent-observability -->
+
 ## Receipts
 
 Every sensitive action can emit a hashed receipt (before/after, actor, approval).
